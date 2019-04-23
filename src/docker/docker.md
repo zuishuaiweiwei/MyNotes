@@ -172,3 +172,19 @@ docker run -d -p 3306:3306 --name mymysql mysql
 
 ### 3）、redis
 
+```
+docker run -d -p 6379:6379 --name myredis redis
+```
+
+### 4)、elasticsearch
+
+```shell
+docker run -e ES_JAVA_OPTS="-Xms256m -Xm×256m" -d -p 9200:9200 -p 9300:9300 --name ES01 4ffc114372c8
+```
+
+### 5）、rabbitmq
+
+```shell
+docker run -d -p 5672:5672 -p 15672:15672 --name myrabbitmq rabbit
+```
+
