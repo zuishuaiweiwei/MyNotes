@@ -1,5 +1,7 @@
 # Spring Boot注解
 
+## 一、cache有关注解
+
 ### 1、 @Cacheable 
 
 可以写在类上和方法上 ，都表示可以缓存的 
@@ -34,7 +36,7 @@
 | ---------------- | ------------------------ |
 | **cacheManager** | **指定使用的缓存管理器** |
 
-
+## 二、Controller有关注解
 
 
 
@@ -105,7 +107,7 @@ public String test(@RequestAttribute("id") String id){}
 
 
 
-## RabbitMq有关的注解
+## 三、RabbitMq有关的注解
 
 ### @EnableRabbit
 
@@ -125,7 +127,129 @@ public String test(@RequestAttribute("id") String id){}
 
 ------
 
-## ElasticSearch有关注解
+## 四、ElasticSearch有关注解
+
+
+
+## 五、Async有关注解
+
+### 	@Async
+
+​	标注在需要异步的方法上，需要配合@EnableAsync一起使用
+
+### 	@EnableAsync
+
+​	开启异步
+
+```java
+@EnableAsync
+@SpringBootApplication
+public class AsyncApplication {
+    
+    
+@Service
+public class HelloService {
+
+    @Async
+    public void hello(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("hello");
+
+    }
+}
+    
+@RestController
+public class HelloController {
+    @Autowired
+    HelloService helloService;
+
+    @GetMapping("hello")
+    public String hello(){
+        helloService.hello();
+        return "success";
+    }
+}
+```
+
+​	加上异步的注解，浏览器会立即显示success 不需要等待3秒
+
+## 六、定时任务有关的注解
+
+### 	@Scheduled
+
+注解在需要定时的方法上,需要配合@EnableScheduling进行使用
+
+### 	@EnableScheduling
+
+开启任务调度
+
+```java
+@EnableScheduling
+@SpringBootApplication
+public class AsyncApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(AsyncApplication.class, args);
+	}
+
+}
+
+@Service
+public class ScheduledService {
+
+    @Scheduled(cron = "0 * * * * MON-SAT")
+    public void test(){
+        System.out.println("hello");
+    }
+}
+```
+
+​		主要属性
+
+| cron | 配置需要什么时间调度任务 |
+| ---- | ------------------------ |
+|      |                          |
+
+​	有6个位置可以配置（* * * * * *）
+
+| 特殊字符 |                       |
+| -------- | --------------------- |
+| ，       | 表示枚举              |
+| *        | 表示任意              |
+| -        | 表示范围              |
+| /        | 表示步长              |
+| ？       | 星期/日期冲突匹配     |
+| L        | 最后                  |
+| W        | 工作日                |
+| C        | 和calender计算的结果  |
+| #        | 星期，4#2 第二个星期4 |
+
+| 位置              | 可以配置的                         |
+| ----------------- | ---------------------------------- |
+| 第一个 * 表示秒   | 0-59  ，  -    *    /              |
+| 第二个 * 表示分   | 0-59  ，  -    *    /              |
+| 第三个 * 表示时   | 0-59  ，  -    *    /              |
+| 第四个 * 表示天   | 1-31  ，  -    *    /  ？  L  W  C |
+| 第五个 * 表示月   | 1-12  ，  -    *    /              |
+| 第六个 * 表示周几 | 0-7或SUN-SAT    0,7都表示星期天    |
+
+​	eg：
+
+​	【0 0/5 14,18 * * ?】每天14点和18点整，每隔5分钟调度一次
+
+​	【0 15 10 ？ * 1-6】每个月周1到周6，10:15 执行一次
+
+​	【0 0 2 ？ * 6L】 每个月的最后一个周6,2:00 执行一次
+
+​	【0 0 2 LW * ?】 每个月的最后一个工作日，2：00执行一次
+
+​	【0 0 2-4 ？ * 1#1】每个月第一个星期1,2点到4点，每个整点都执行一次
+
+​	
 
 
 
