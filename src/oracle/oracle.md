@@ -35,4 +35,47 @@
 | add_month(sysdate,5)                        | 日期加上指定月份                                           |
 | next_day(sysdate,5)                         | 指定日期的下一个周几                                       |
 | **to_date**('2004-11-27','yyyy-mm-dd')      | str的日期变为date类型                                      |
+| union                                       | 俩个查询结果并集                                           |
+| intersect                                   | 俩个查询结果交集                                           |
+| minus                                       | 俩个查询结果差集                                           |
 
+## 2、常用操作
+
+### 	2.1 导入导出表
+
+导入表
+
+```shell
+imp username/pwd@localhost/ORCL file=".dmp文件路径" full=y ignore=y
+```
+
+### 	2.2 密码过期
+
+```sql
+SELECT username,profile FROM dba_users
+SELECT * FROM dba_profiles s WHERE s.profile='DEFAULT' AND resource_name='PASSWORD_LIFE_TIME';
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+```
+
+### 	2.3 修改密码
+
+```sql
+alter user scott identified by tiger;
+```
+
+### 	2.4 创建表
+
+```sql
+create table course (
+    cno number(3) primary key ,
+    cname varchar2(10)
+);
+```
+
+​	需要注意的点 
+
+​	（1）、如果是int类型的字段，最好使用number（字段大小）类型，如果要使用int和integer类型 后边不能加大小。
+
+​	（2）、每个字段后边是，号
+
+​	（3）、创建表的最后一个字段没有，号，有了会报错

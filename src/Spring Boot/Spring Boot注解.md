@@ -101,6 +101,10 @@ public String test(@RequestAttribute("id") String id){}
 
 当有多个同一类型的Bean时，可以用@Qualifier(“name”)来指定（name是方法的名字）。与@Autowired配合使用。@Qualifier限定描述符除了能根据名字进行注入，但能进行更细粒度的控制如何选择候选者
 
+------
+
+
+
 ## RabbitMq有关的注解
 
 ### @EnableRabbit
@@ -113,9 +117,15 @@ public String test(@RequestAttribute("id") String id){}
 
 ​	主要属性
 
-​	
-
 |       |                                    |
 | ----- | ---------------------------------- |
 | queue | 表示监听的队列，可以放数组监听多个 |
+
+
+
+------
+
+## ElasticSearch有关注解
+
+
 
