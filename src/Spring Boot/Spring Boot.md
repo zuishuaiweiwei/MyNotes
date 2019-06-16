@@ -3108,7 +3108,7 @@ EmbeddedServletContainerFactory containerFactory = getEmbeddedServletContainerFa
 
 ​		缺点：默认不支持JSP、优化定制比较复杂（使用定制器【ServerProperties、自定义EmbeddedServletContainerCustomizer】，自己编写嵌入式Servlet容器的创建工厂【EmbeddedServletContainerFactory】）；
 
-
+​	**注意：tomcat版本过低启动会失败，不能启动springboot项目**
 
 外置的Servlet容器：外面安装Tomcat---应用war包的方式打包；
 
