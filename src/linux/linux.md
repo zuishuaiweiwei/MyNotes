@@ -4,17 +4,17 @@
 
  
 
-| 产看内核版本          | uname -r           |
-| --------------------- | ------------------ |
-| **查看liunx系统版本** | **cat /etc/issue** |
-| stty -a               | 查看所有快捷键     |
-| df -h                 | 查看硬盘使用状态   |
-|                       |                    |
-|                       |                    |
-|                       |                    |
-|                       |                    |
-|                       |                    |
-|                       |                    |
+| 产看内核版本              | uname -r                                    |
+| :------------------------ | ------------------------------------------- |
+| **查看liunx系统版本**     | **cat /etc/issue**                          |
+| stty -a                   | 查看所有快捷键                              |
+| df -h                     | 查看硬盘使用状态                            |
+| free                      | 查看内存使用情况                            |
+| ntpdate asia.pool.ntp.org | 同步时间                                    |
+| echo $?                   | 查看上一条命令是否正确执行                  |
+| **&>/dev/null**           | 不让打印命令结果重定向到垃圾箱              |
+| netstat -tuln             | 查看正在监听的tcp和udp端口                  |
+| nmap -sT ip               | 扫描ip地址的主机开启的Tcp端口，是否正常响应 |
 
 ------
 
@@ -230,6 +230,8 @@ wc [选项] filePath
 
 ​	-s 软链接 其大小为路径所包含的字符个数，引用了源文件的路径，删除源文件失效，硬链接则不会
 
+
+
 ## 二、 常用软件安装
 
  ### 1、 mysql
@@ -412,9 +414,11 @@ alias vi='vim'
 
 ​	把信息保存到文件里叫输出重定向
 
-```pwd
+```tex
+> 覆盖文件 
+>> 追加文件
 命令 >> abc 2>&1 
-命令 &>> abc
+命令 &> abc &>> abc
 不管是正确信息还是错误信息都会保存在一个文件里
 命令 >> abc 2>>error
 正确输出到abc中，错误输出到error中
@@ -697,4 +701,223 @@ echo $?
 | 判断1 -a 判断2 | &&   |
 | 判断1 -o 判断2 | \|\| |
 | !判断          | 取反 |
+
+### 流程控制
+
+#### 1）if
+
+​	
+
+```shell
+#单分支if
+if [ 判断条件 ]；then
+		做的事情		
+fi
+## then写到判断条件后面需要加 ； 
+#判断条件和[] 两边有空格
+或者写成这样
+if [ 判断条件 ]
+	then
+		做的事情		
+fi
+#例子 如果根分区到百分之60就报警
+#！/bin/bash
+aa=$(df -h | grep "/dev/sda3" | awk '{print $5}'| cut -d "%" -f1)
+
+if [ "$aa" -ge 60 ]
+        then
+                echo "error"
+fi
+```
+
+```shell
+#双分支if
+if [ 条件 ] 
+	then
+		todo
+	else
+		todo
+fi
+```
+
+```shell
+#多分支if
+if [ 条件 ]
+	then
+		todo
+	elif[ 条件 ]
+		then
+			todo
+	else[ 条件 ]
+		then
+			todo
+fi
+
+```
+
+
+
+```shell
+###四则运算计算机 shell版本
+# if格式没有记清楚
+# if里面的 == 两边需要有空格
+# echo 输出运算的内容 $(($num1 + $num2)) 
+# shell 中的数值运算  $(()) 
+
+#!/bin/bash
+read -t 30 -p "请输入第一个数字: " num1
+read -t 30 -p "请输入运算符[+|-|*|/]: " opt
+read -t 30 -p "请输入第二个数字: " num2
+#echo $opt
+#echo $num2
+if [ -n "$num1" -a -n "$num2" -a -n "$opt" ]
+        then
+                test1=$(echo $num1 | sed 's/[0-9]//g')
+                test2=$(echo $num2 | sed 's/[0-9]//g')
+                if [ -z "$test1" -a -z "$test2" ]
+                        then
+                                if [ "$opt" == '+' ]
+                                        then
+                                                echo "this is +"
+                                                echo $(($num1 + $num2))
+                                                #exit 0
+                                        elif [ "$opt" == '-' ]
+                                                then
+                                                        echo "this is -"
+                                                        echo $(($num1 - $num2))
+                                        elif [ "$opt" == '*' ]
+                                                then
+                                                        echo "this is *"
+                                                        echo $(($num1 * $num2))
+                                        elif [ "$opt" == '/' ]
+                                                then
+                                                        echo "this is /"
+                                                        echo $(($num1 / $num2))
+"count.sh" 43L, 928C                                                                                                      28,6-41       Top
+
+```
+
+#### 2）case
+
+​	
+
+```shell
+case 变量 in
+	"值1")
+		todo
+		;;
+	"值2")
+		todo
+		;;
+	*)
+		todo
+	;;
+esac
+```
+
+
+
+#### 3）for
+
+```shell
+for 变量 in 值1 值2 值3
+	do
+		todo
+	done
+```
+
+
+
+```shell
+for ((i=1;i<=100;i=i+1))
+	do
+		todo
+	done
+```
+
+#### 4）while
+
+```shell
+while [ 条件 ]
+	do
+		todo
+	done
+```
+
+#### 5）until
+
+​	和while是反着的 ，只要条件不成立就执行
+
+```shell
+until [ 条件 ]
+	do
+		todo
+	done
+```
+
+#### 6）exit
+
+​	特殊流程控制语句
+
+​	shell脚本读到exit就退出脚本，不再继续执行
+
+​	exit可以指定返回值 echo $?得到就是自己指定的返回值
+
+#### 7）break
+
+​	跳出整个当前循环
+
+#### 8）continue
+
+​	跳出这次循环，开始下一次循环
+
+
+
+#### 6）简单判断合法IP
+
+```shell
+#!/bin/bash
+
+cd /usr/local/mysh
+## 粗略过滤的有效IP写入一个文件
+$(cat ip.text | grep "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}" > test1.txt)
+
+aa=$(cat test1.txt| wc -l)
+echo "第一次过滤有效行数 = $aa"
+for i in $(cat test1.txt)
+        do
+         
+                echo "遍历的ip： $i"
+                echo "$i" > test2.txt
+                num1=$(cut -d "." -f1 test2.txt)
+                num2=$(cut -d "." -f2 test2.txt)
+                num3=$(cut -d "." -f3 test2.txt)
+                num4=$(cut -d "." -f4 test2.txt)
+
+
+                #echo "$num1 : $num2 : $num3 : $num4"
+                if [ "$num1" -lt 0 -o "$num1" -gt 256 ]
+                        then
+                        continue
+                fi
+
+                 if [ "$num2" -lt 0 -o "$num2" -gt 256 ]
+                        then
+                        continue
+                fi
+
+                 if [ "$num3" -lt 0 -o "$num3" -gt 256 ]
+                        then
+                        continue
+                fi
+
+                 if [ "$num4" -lt 0 -o "$num4" -gt 256 ]
+                        then
+                        continue
+                fi
+                echo "有效的ip $i"
+
+        done
+
+```
 
