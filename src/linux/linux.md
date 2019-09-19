@@ -230,6 +230,50 @@ wc [选项] filePath
 
 ​	-s 软链接 其大小为路径所包含的字符个数，引用了源文件的路径，删除源文件失效，硬链接则不会
 
+### 7、rpm
+
+```shell
+# 直接安装
+rpm -ivh your-package         
+# 忽略报错，强制安装
+rpmrpm --force -ivh your-package.rpm 
+# 查询
+rpm -ql name        
+# 卸载
+rpm -e name        
+# 列出所有安装过的包
+rpm -qa 
+# 输出软件包的全名称
+rpm -q name
+# 列出软件所有文件安装的位置
+rpm -ql tree 
+```
+
+### 8、tail
+
+​	就是把某个档案文件的最后几行显示到终端上，假设该档案有更新，tail会自己主动刷新，确保你看到最新的档案内容。
+
+```shell
+# 监视filename文件的尾部内容（默认10行，相当于增加参数 -n 10），刷新显示在屏幕上。退出，按下CTRL+C
+# -f 是继续监视文件 实时刷新
+# -n 指定行数
+tail -f filename
+# 逆序显示filename最后10行。
+tail -r -n 10 filename
+# 显示filename的后6行
+tail -6 filename
+```
+
+### 9、head
+
+​	和tail相反，显示文件的开头部分
+
+```shell
+# 显示filename的前6行
+head -6 filename
+
+```
+
 
 
 ## 二、 常用软件安装
@@ -244,9 +288,8 @@ wc [选项] filePath
 
 ### 3 、docker
 
-```
-1、centos版本在6.5以上 内核版本在3.1以上
-
+```shell
+#centos版本在6.5以上 内核版本在3.1以上
 yum install https://get.docker.com/rpm/1.7.1/centos-6/RPMS/x86_64/docker-engine-1.7.1-1.el6.x86_64.rpm
 
 ```
@@ -310,17 +353,17 @@ Root用户在文件/etc/security/limits.confg添加配置
 
 （3）、max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
 
-```
-使用Root用户在文件 /etc/sysctl.conf 添加配置
+```shell
+#使用Root用户在文件 /etc/sysctl.conf 添加配置
 vm.max_map_count=655360
-执行命令，使配置生效
+#执行命令，使配置生效
 sysctl -p
 ```
 
 （4）、the default discovery settings are unsuitable for production use; at least one of [discovery.seed_hosts, discovery.seed_providers, cluster.initial_master_nodes] must be configured
 
-```
-修改elsearch配置文件
+```shell
+#修改elsearch配置文件
 vim /elasticsearch/config/elasticsearch.yml 
 
 将    #cluster.initial_master_nodes: ["node-1", "node-2"] 
@@ -328,6 +371,42 @@ vim /elasticsearch/config/elasticsearch.yml
 ```
 
 ​	然后就可以启动了
+
+### 5、python
+
+​	
+
+```shell
+#安装依赖
+yum install gcc -y
+yum install zlib -y
+yum install zlib-devel -y
+yum install openssl-devel -y
+#下载压缩包、解压
+cd /usr/local/
+wget https://www.python.org/ftp/python/3.4.4/Python-3.4.4.tar.xz
+tar -xvJf Python-3.4.4.tar.xz
+#编译安装
+cd /usr/local/Python-3.4.4
+./configure prefix=/usr/local/python3
+make && make install
+#设置环境变量
+```
+
+### 6、nginx
+
+```shell
+#
+vi  /etc/yum.repos.d/nginx.repo 
+#
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/6/$basearch/   
+gpgcheck=0
+enabled=1
+#
+yum install nginx
+```
 
 
 
@@ -456,6 +535,12 @@ id:3:initdefault:
 6：重启
 
 不能设置为0 和 6
+```
+
+### 10、bash字体
+
+```shell
+export PS1="\[\033[1;36m\]\u\[\033[1;32m\][\w]\[\033[1;33m\]->\[\033[0m\]"
 ```
 
 

@@ -65,9 +65,9 @@
 
 ```xml
 <dependency>
-							<groupId>mysql</groupId>
-							<artifactId>mysql-connector-java</artifactId>
-							<scope>runtime</scope>
+							<groupId>com.oracle</groupId>
+							<artifactId>ojdbc6</artifactId>
+							<version>11.2.0.1.0</version>
 						</dependency>	
 ```
 
